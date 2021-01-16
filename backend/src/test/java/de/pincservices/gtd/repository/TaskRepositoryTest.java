@@ -1,8 +1,6 @@
 package de.pincservices.gtd.repository;
 
-import de.pincservices.gtd.model.Task;
-import de.pincservices.gtd.model.Due;
-import de.pincservices.gtd.model.Resolution;
+import de.pincservices.gtd.model.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,8 +54,8 @@ class TaskRepositoryTest {
         task.setId("junitActionId");
         task.setSummary("junitAction");
         task.setTags(Collections.singleton("junitTag"));
-        task.setDue(new Due("junitDueId", 0l, new Date(), Due.Type.AT));
-        task.setResolution(new Resolution("junitResolutionId", 0l, new Date(), Resolution.State.SOLVED, null));
+        task.setDue(new EmbeddedDue(LocalDate.now(), Due.Type.AT));
+        task.setResolution(new EmbeddedResolution(LocalDate.now(), Resolution.State.SOLVED, null));
         taskRepository.save(task);
 
         assertThat(taskRepository.count()).isEqualTo(1L);
@@ -74,17 +72,17 @@ class TaskRepositoryTest {
         Task parentTask = new Task();
         parentTask.setId("junitParentActionId");
         parentTask.setSummary("junitParentAction");
-        parentTask.setDue(new Due("junitParentDueId", 0l, new Date(), Due.Type.AT));
+        parentTask.setDue(new EmbeddedDue(LocalDate.now(), Due.Type.AT));
         taskRepository.save(parentTask);
 
 
         Task task = new Task();
-        task.setParents(Collections.singleton(parentTask));
+        task.setPreviousTasks(Collections.singleton(parentTask));
         task.setId("junitActionId");
         task.setSummary("junitAction");
         task.setTags(Collections.singleton("junitTag"));
-        task.setDue(new Due("junitDueId", 0l, new Date(), Due.Type.AT));
-        task.setResolution(new Resolution("junitResolutionId", 0l, new Date(), Resolution.State.SOLVED, null));
+        task.setDue(new EmbeddedDue(LocalDate.now(), Due.Type.AT));
+        task.setResolution(new EmbeddedResolution(LocalDate.now(), Resolution.State.SOLVED, null));
         taskRepository.save(task);
 
         assertThat(taskRepository.count()).isEqualTo(2L);

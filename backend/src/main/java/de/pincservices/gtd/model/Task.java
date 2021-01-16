@@ -1,15 +1,21 @@
 package de.pincservices.gtd.model;
 
+import de.pincservices.gtd.model.converters.DueToMapConverter;
+import de.pincservices.gtd.model.converters.ResolutionToMapConverter;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.neo4j.core.schema.CompositeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
+import static org.springframework.data.neo4j.core.schema.Relationship.Direction.INCOMING;
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction.OUTGOING;
 
 @Persistent
@@ -24,12 +30,17 @@ public class Task {
     private String notes;
     private Set<String> tags;
 
-    @Relationship(type = "HAS_PARENT", direction = OUTGOING)
-    private Collection<Task> parents;
+    @Relationship(type = "IS_NEXT_OF", direction = INCOMING)
+    private Collection<Task> previousTasks;
 
-    @Relationship(type = "HAS_DUE", direction = OUTGOING)
-    private Due due;
+    /**
+     * Custom delimiter required because Spring does not allow multiple dots in order fragment of query.
+     * See {@link de.pincservices.gtd.repository.TaskRepository#findAllSortedBy(Sort)}.
+     */
+    @CompositeProperty(converter = DueToMapConverter.class, delimiter = "_")
+    private EmbeddedDue due;
 
-    @Relationship(type = "HAS_RESOLUTION", direction = OUTGOING)
-    private Resolution resolution;
+    @CompositeProperty(converter = ResolutionToMapConverter.class,  delimiter = "_")
+    private EmbeddedResolution resolution;
+
 }
