@@ -1,0 +1,13 @@
+# develop stage
+FROM node:alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
+COPY . .
+
+RUN npm install
+RUN node node_modules/quasar-cli/bin/quasar-build
+
+# production stage
+FROM nginx:alpine
+COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
+EXPOSE 80
