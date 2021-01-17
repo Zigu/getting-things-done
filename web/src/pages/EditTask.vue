@@ -15,49 +15,54 @@
       <q-input
         filled
         v-model="summary"
-        label="Summary *"
-        lazy-rules="true"
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :label="$t('Summary *')"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || $t('Please type something')]"
         :loading="loading"
         :disable="loading"
       />
 
-      <q-field filled label="Notes" stack-label :loading="loading" :disable="loading">
+      <q-field :label="$t('Notes')" :loading="loading" :disable="loading" borderless>
         <template v-slot:control>
+          <div class="q-pa-md full-width">
           <GtdEditor v-model="notes"
                      :loading="loading"
                      :disable="loading"/>
+          </div>
         </template>
       </q-field>
 
-      <q-select
-        filled
-        v-model="dueType"
-        :options="dueTypeOptions"
-        :option-label="option => option.toLowerCase()"
-        label="Due Type"
-        :loading="loading"
-        :disable="loading"
-      />
-
-      <q-input
-        filled
-        type="date"
-        v-model="dueDate"
-        label="Due Date"
-        :loading="loading"
-        :disable="loading"
-      />
+      <q-field :label="$t('Due')" :loading="loading" :disable="loading" borderless>
+        <div class="q-pa-md full-width">
+          <div class="row q-gutter-md">
+            <div class="col">
+              <q-select
+                filled
+                v-model="dueType"
+                :options="dueTypeOptions"
+                :option-label="option => $t(option.toLowerCase())"
+              />
+            </div>
+            <div class="col">
+              <q-input
+              filled
+              type="date"
+              v-model="dueDate"
+              />
+            </div>
+          </div>
+        </div>
+      </q-field>
       <q-input
         filled
         v-model="tags"
-        label="Tags"
+        :label="$t('Tags')"
         :loading="loading"
         :disable="loading"
       />
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"/>
+        <q-btn :label="$t('Submit')" type="submit" color="primary"/>
+        <q-btn :label="$t('Reset')" type="reset" color="primary" flat class="q-ml-sm"/>
       </div>
     </q-form>
   </q-page>

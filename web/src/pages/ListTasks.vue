@@ -19,7 +19,7 @@
           <div class="full-width row flex-center text-green bg-white q-gutter-sm">
             <q-icon size="2em" name="mood" />
             <span>
-            You do not have any open tasks. ({{ message }})
+            {{ $t('You do not have any open tasks.') }} ({{ $t(message) }})
           </span>
             <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon" />
           </div>
@@ -35,7 +35,7 @@
                   {{props.row.summary}}
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
                 </div>
-                <div class="text-subtitle2">due {{ props.cols[2].value }}</div>
+                <div class="text-subtitle2">{{$t('due')}} {{ props.cols[2].value }}</div>
                 <div class="text-subtitle2"
                      v-if="props.row.resolution.state !== 'UNSOLVED'">{{ props.cols[3].value}}</div>
               </q-card-section>
@@ -53,7 +53,7 @@
               </q-card-section>
               <q-separator v-if="resolvedWithComment(props)"/>
               <q-card-section v-if="resolvedWithComment(props)">
-                <p><b>Resolution</b></p>
+                <p><b>{{$t('Resolution')}}}</b></p>
                 <div v-html="props.row.resolution.comment" />
               </q-card-section>
               <q-separator/>
@@ -95,7 +95,7 @@
     <q-dialog v-model="resolutionPrompt" persistent full-width>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Solve task</div>
+          <div class="text-h6">{{$t('Solve task')}}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -105,16 +105,16 @@
             :options="resolutionStateOptions"
             option-label="desc"
             option-value="id"
-            label="Resolution State"
+            :label="$t('Resolution State')"
             emit-value
             map-options
           />
-          <GtdEditor label="Comment" v-model="modalResolution.comment" />
+          <GtdEditor :label="$t('Comment')" v-model="modalResolution.comment" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" @click="resolve(false)" />
-          <q-btn flat label="Solve" @click="resolve(true)" />
+          <q-btn flat :label="$t('Cancel')" @click="resolve(false)" />
+          <q-btn flat :label="$t('Solve')" @click="resolve(true)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -153,8 +153,8 @@ export default {
       modalResolution: { state: 'SOLVED', comment: '' },
       taskToSolve: null,
       resolutionStateOptions: [
-        { id: 'SOLVED', desc: 'Solved' },
-        { id: 'DISCARDED', desc: 'Discarded' },
+        { id: 'SOLVED', desc: this.$t('Solved') },
+        { id: 'DISCARDED', desc: this.$t('Discarded') },
       ],
       initialPagination: {
         sortBy: 'desc',
@@ -167,14 +167,14 @@ export default {
         {
           name: 'notes',
           align: 'left',
-          label: 'Notes',
+          label: this.$t('Notes'),
           field: 'notes',
           sortable: false,
         },
         {
           name: 'tags',
           align: 'left',
-          label: 'Tags',
+          label: this.$t('Tags'),
           field: 'tags',
           format: (val) => (val != null ? `${val.join(',')}` : ''),
           sortable: false,
@@ -182,19 +182,19 @@ export default {
         {
           name: 'due',
           align: 'right',
-          label: 'Due',
+          label: this.$t('Due'),
           field: 'due',
           // eslint-disable-next-line no-unused-vars
-          format: (val) => (val != null ? `${val.type.toLowerCase()} ${val.date.format('DD.MM.YYYY')}` : ''),
+          format: (val) => (val != null ? `${this.$t(val.type.toLowerCase())} ${val.date.format('DD.MM.YYYY')}` : ''),
           sortable: false,
         },
         {
           name: 'resolution',
           align: 'left',
-          label: 'Resolution',
+          label: this.$t('Resolution'),
           field: 'resolution',
           // eslint-disable-next-line no-unused-vars
-          format: (val) => (val != null ? `${val.state.toLowerCase()} at ${val.date.format('DD.MM.YYYY')}` : ''),
+          format: (val) => (val != null ? `${this.$t(val.state.toLowerCase())} ${this.$t('at')} ${val.date.format('DD.MM.YYYY')}` : ''),
           sortable: false,
         },
       ],
