@@ -34,7 +34,10 @@ services:
       - SPRING_NEO4J_USERNAME=${NEO4J_USERNAME}
       - SPRING_NEO4J_PASSWORD=${NEO4J_PASSWORD}
   web:
-    build: ./web/
+    build: 
+      context: ./web/
+      args: 
+        BACKEND_URL: "http://localhost:8080"
     image: getting-things-done-frontend
     container_name: getting-things-done-frontend
     ports:
@@ -43,8 +46,10 @@ services:
       - backend
     networks:
       - getting-things-done-network
+# environment configuration is not available during build phase but only in container at runtime
     environment:
-      - BACKEND_URL=http://backend:8080
+      - BACKEND_URL=http://localhost:8080
+    command: quasar serve dist/spa --hostname 0.0.0.0 --port 80
 
 networks:
   getting-things-done-network:

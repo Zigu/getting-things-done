@@ -2,7 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
-axios.defaults.baseURL = process.env.BACKEND_URL ? process.env.BACKEND_URL : 'http://localhost:8082';
+axios.defaults.baseURL = process.env.AXIOS_BACKEND_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function requestToJson(data) {

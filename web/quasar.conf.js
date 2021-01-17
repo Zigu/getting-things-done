@@ -9,7 +9,7 @@
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
 
-module.exports = function (/* ctx */) {
+module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -48,7 +48,9 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      env: {
+        AXIOS_BACKEND_URL: ctx.dev ? 'http://localhost:8082' : process.env.BACKEND_URL,
+      },
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
@@ -79,7 +81,7 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8081,
+      port: 8083,
       open: true, // opens browser window automatically
     },
 

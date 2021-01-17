@@ -1,17 +1,14 @@
-# develop stage
-FROM node:alpine as develop-stage
+FROM node:lts-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN yarn global add @quasar/cli
+RUN npm install -g @quasar/cli
 COPY . .
-
-# build stage
-FROM develop-stage as build-stage
-RUN yarn
+RUN npm install
+RUN npm rebuild node-sass
+ARG BACKEND_URL
+ENV BACKEND_URL=${BACKEND_URL}
+RUN env
 RUN quasar build
 
-# production stage
-FROM nginx:alpine as production-stage
-COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8083
+CMD ["quasar","serve", "dist/spa", "--hostname", "0.0.0.0", "--port", "8083"]
