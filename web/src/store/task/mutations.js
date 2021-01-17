@@ -21,18 +21,14 @@ export function replaceState(state, tasks) {
     let mappedDue = null;
     if (task.due != null) {
       mappedDue = {
-        id: task.due.id,
-        version: task.due.version,
-        date: dayjs(task.due.date),
+        date: dayjs(task.due.date, 'YYYY-MM-DD'),
         type: task.due.type,
       };
     }
     let mappedResolution = null;
     if (task.resolution != null) {
       mappedResolution = {
-        id: task.resolution.id,
-        version: task.resolution.version,
-        date: dayjs(task.resolution.date),
+        date: dayjs(task.resolution.date, 'YYYY-MM-DD'),
         state: task.resolution.state,
         comment: task.resolution.comment,
       };

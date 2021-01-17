@@ -16,7 +16,7 @@
         filled
         v-model="summary"
         label="Summary *"
-        lazy-rules
+        lazy-rules="true"
         :rules="[ val => val && val.length > 0 || 'Please type something']"
         :loading="loading"
         :disable="loading"
@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import dayjs from 'dayjs';
 import GtdEditor from 'components/GtdEditor';
+import dayjs from 'dayjs';
 
 export default {
   name: 'EditTask',
@@ -73,23 +73,17 @@ export default {
   mounted() {
     const foundTasks = this.$store.state.task.tasks.filter((t) => t.id === this.id);
     if (foundTasks.length === 1) {
-      const foundTask = foundTasks[0];
-      this.version = foundTask.version;
-      this.summary = foundTask.summary;
-      this.notes = foundTask.notes;
-      this.tags = foundTask.tags.join(',');
-      if (foundTask.due != null) {
-        this.dueDate = dayjs(foundTask.due.date)
-          .format('YYYY-MM-DD');
-        this.dueType = foundTask.due.type;
-      }
-      this.resolution = foundTask.resolution;
+      // slice does not work properly
+      // eslint-disable-next-line prefer-destructuring
+      this.foundTask = foundTasks[0];
+      this.mapFoundTask();
     }
     this.loading = false;
   },
   data() {
     return {
       loading: true,
+      foundTask: null,
       parentId: this.$route.params.parentId,
       id: this.$route.params.id,
       version: null,
@@ -99,6 +93,11 @@ export default {
       dueType: 'AT',
       tags: null,
       dueTypeOptions: ['AT', 'BEFORE'],
+      resolution: {
+        state: 'UNSOLVED',
+        date: dayjs(),
+        comment: '',
+      },
     };
   },
 
@@ -114,7 +113,7 @@ export default {
           parentTasks = foundParentTasks;
         }
       }
-      const action = {
+      const task = {
         id: this.id,
         version: this.version,
         notes: this.notes,
@@ -123,15 +122,11 @@ export default {
         parents: parentTasks,
         due: {
           type: this.dueType,
-          date: dayjs(this.dueDate, 'MM-DD-YYYY'),
+          date: dayjs(this.dueDate, 'YYYY-MM-DD'),
         },
-        resolution: {
-          state: 'UNSOLVED',
-          date: dayjs(),
-          comment: '',
-        },
+        resolution: this.resolution,
       };
-      this.$store.dispatch('task/save', action)
+      this.$store.dispatch('task/save', task)
         .then(() => {
           this.$router.push('/tasks/unsolved');
           this.$q.notify({
@@ -153,14 +148,33 @@ export default {
     },
 
     onReset() {
-      this.id = this.$route.params.id;
-      this.version = null;
-      this.summary = '';
-      this.notes = '';
-      this.dueDate = dayjs()
-        .format('YYYY-MM-DD');
-      this.dueType = 'AT';
-      this.tags = null;
+      this.mapFoundTask();
+    },
+    mapFoundTask() {
+      if (this.foundTask) {
+        this.version = this.foundTask.version;
+        this.summary = this.foundTask.summary;
+        this.notes = this.foundTask.notes;
+        this.tags = this.foundTask.tags.join(',');
+        if (this.foundTask.due != null) {
+          this.dueDate = dayjs(this.foundTask.due.date).format('YYYY-MM-DD');
+          this.dueType = this.foundTask.due.type;
+        }
+        this.resolution = this.foundTask.resolution;
+      } else {
+        this.id = this.$route.params.id;
+        this.version = null;
+        this.summary = '';
+        this.notes = '';
+        this.dueDate = dayjs(Date.now()).format('YYYY-MM-DD');
+        this.dueType = 'AT';
+        this.tags = null;
+        this.resolution = {
+          state: 'UNSOLVED',
+          date: dayjs(),
+          comment: '',
+        };
+      }
     },
   },
 };
