@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+  database:
+    image: neo4j:latest
+    container_name: getting-things-done-neo4j
+    restart: unless-stopped
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+#      - $HOME/neo4j/conf:/conf
+      - $HOME/neo4j/data:/data
+#      - $HOME/neo4j/import:/var/lib/neo4j/import
+      - $HOME/neo4j/logs:/logs
+#      - $HOME/neo4j/plugins:/plugins
+    networks:
+      - getting-things-done-network
+    environment:
+      - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
+  backend:
+    build: ./backend/
+    image: getting-things-done-backend
+    container_name: getting-things-done-backend
+    restart: always # required to be "wait" until neo4j is started properly
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - getting-things-done-network
+    environment:
+      - SPRING_NEO4J_URI=bolt://database:7687
+      - SPRING_NEO4J_USERNAME=${NEO4J_USERNAME}
+      - SPRING_NEO4J_PASSWORD=${NEO4J_PASSWORD}
+  web:
+    build: 
+      context: ./web/
+      args: 
+        BACKEND_URL: "http://localhost:8080"
+    image: getting-things-done-frontend
+    container_name: getting-things-done-frontend
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+    networks:
+      - getting-things-done-network
+# environment configuration is not available during build phase but only in container at runtime
+    environment:
+      - BACKEND_URL=http://localhost:8080
+    command: quasar serve dist/spa --hostname 0.0.0.0 --port 80
+
+networks:
+  getting-things-done-network:
