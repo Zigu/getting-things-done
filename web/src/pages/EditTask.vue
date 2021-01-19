@@ -134,15 +134,16 @@ export default {
       this.$store.dispatch('task/save', task)
         .then(() => {
           this.$router.push('/tasks/unsolved');
+          const translatedMessage = this.$t('Submitted');
           this.$q.notify({
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
-            message: 'Submitted',
+            message: translatedMessage,
           });
         })
         .catch((error) => {
-          const errorMessage = `Error occurred. ${error}`;
+          const errorMessage = `${this.$t('Error occurred.')} ${error}`;
           this.$q.notify({
             color: 'red-4',
             textColor: 'white',
