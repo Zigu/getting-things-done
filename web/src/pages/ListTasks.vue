@@ -32,7 +32,8 @@
             <q-card :class="props.selected ? 'bg-grey-2' : ''">
               <q-card-section>
                 <div class="text-h6">
-                  {{props.row.summary}}
+                  <span class="q-pr-md">{{props.row.summary}}</span>
+                  <q-icon name="alarm" color="red" v-if="isOverdue(props.row)" size="md"/>
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
                 </div>
                 <div class="text-subtitle2">{{$t('due')}} {{ props.cols[2].value }}</div>
@@ -53,7 +54,7 @@
               </q-card-section>
               <q-separator v-if="resolvedWithComment(props)"/>
               <q-card-section v-if="resolvedWithComment(props)">
-                <p><b>{{$t('Resolution')}}}</b></p>
+                <p><b>{{$t('Resolution')}}</b></p>
                 <div v-html="props.row.resolution.comment" />
               </q-card-section>
               <q-separator/>
@@ -90,7 +91,7 @@
       </q-table>
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab icon="add" color="secondary" :to="getNewLink()" />
+      <q-btn fab icon="add_task" color="secondary" :to="getNewLink()" />
     </q-page-sticky>
     <q-dialog v-model="resolutionPrompt" persistent full-width>
       <q-card style="min-width: 350px">
@@ -125,6 +126,7 @@
 import Progress from 'components/Progress';
 import GtdEditor from 'components/GtdEditor';
 import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 
 export default {
   name: 'ListTasks',
@@ -229,6 +231,9 @@ export default {
     unsolve(task) {
       const unsolvedResolution = { state: 'UNSOLVED', comment: '' };
       this.$store.dispatch('task/resolve', { task, resolutionValues: unsolvedResolution });
+    },
+    isOverdue(task) {
+      return task.due.date.isBefore(dayjs().add(2, 'day')) && task.resolution.state === 'UNSOLVED';
     },
   },
 };
