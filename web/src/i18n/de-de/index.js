@@ -4,8 +4,11 @@
 export default {
   failed: 'Aktion fehlgeschlagen.',
   success: 'Aktion erfolgreich.',
-  'You do not have any open tasks.': 'Sie haben keine offenen Aufgaben.',
+  'You do not have any unsolved tasks.': 'Sie haben keine offenen Aufgaben.',
+  'You do not have any solved tasks.': 'Sie haben keine erledigten Aufgaben.',
+  'You do not have any discarded tasks.': 'Sie haben keine hinfälligen Aufgaben.',
   'Loading...': 'Wird geladen...',
+  'No data available': 'Keine Daten verfügbar',
   Resolution: 'Ergebnis',
   'Solve task': 'Aufgabe erledigen',
   'Resolution State': 'Lösung',

@@ -17,9 +17,9 @@
       >
         <template v-slot:no-data="{ icon, message, filter }">
           <div class="full-width row flex-center text-green bg-white q-gutter-sm">
-            <q-icon size="2em" name="mood" />
+            <q-icon size="2em" :name="moodIcon(requestedResolutionState)" />
             <span>
-            {{ $t('You do not have any open tasks.') }} ({{ $t(message) }})
+            {{ $t(`You do not have any ${requestedResolutionState} tasks.`) }} ({{ $t(message) }})
           </span>
             <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon" />
           </div>
@@ -141,6 +141,9 @@ export default {
       }
       return this.$store.state.task.tasks;
     },
+    requestedResolutionState() {
+      return this.$route.params.resolutionState;
+    },
   },
   mounted() {
     this.$store.dispatch('task/loadAllTasks').then(() => {
@@ -234,6 +237,16 @@ export default {
     },
     isOverdue(task) {
       return task.due.date.isBefore(dayjs().add(2, 'day')) && task.resolution.state === 'UNSOLVED';
+    },
+    moodIcon(resolutionState) {
+      if (resolutionState === 'solved') {
+        return 'sentiment_dissatisfied';
+      }
+
+      if (resolutionState === 'discarded') {
+        return 'sentiment_satisfied';
+      }
+      return 'sentiment_very_satisfied';
     },
   },
 };

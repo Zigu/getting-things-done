@@ -14,6 +14,14 @@
         <q-toolbar-title>
           Getting Things Done
         </q-toolbar-title>
+        <q-space />
+
+        <q-select dark dense borderless v-model="searchCriterion" :options="searchCriteria" />
+        <q-input dark dense standout v-model="searchText" input-class="text-right" class="q-ml-md">
+          <template v-slot:append>
+            <q-icon name="search" class="cursor-pointer" @click="submitSearch"/>
+          </template>
+        </q-input>
       </q-toolbar>
     </q-header>
 
@@ -108,7 +116,19 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
+      searchText: '',
+      searchCriterion: 'default',
+      searchCriteria: ['default', 'tag', 'text', 'regex', 'dueDate'],
     };
+  },
+  methods: {
+    submitSearch() {
+      const params = {
+        searchExpression: this.searchText,
+        searchCriterion: this.searchCriterion,
+      };
+      this.$store.dispatch('task/search', params);
+    },
   },
 };
 </script>

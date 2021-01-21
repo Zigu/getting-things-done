@@ -22,3 +22,11 @@ export function loadAllTasks(context) {
     context.commit('replaceState', result);
   });
 }
+
+export function search(context, searchParams) {
+  return axios.get(`/tasks?searchCriterion=${searchParams.searchCriterion}&searchExpression=${searchParams.searchExpression}`)
+    .then((response) => {
+      const result = response.data;
+      context.commit('replaceState', result);
+    });
+}
