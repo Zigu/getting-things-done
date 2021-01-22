@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="text-green-7 bg-grey-2">
         <q-btn
           flat
           dense
@@ -16,8 +16,9 @@
         </q-toolbar-title>
         <q-space />
 
-        <q-select dark dense borderless v-model="searchCriterion" :options="searchCriteria" />
-        <q-input dark dense standout v-model="searchText" input-class="text-right" class="q-ml-md">
+        <q-select dense borderless v-model="searchCriterion" :options="searchCriteria" />
+        <q-input dense rounded outlined
+                 v-model="searchText" input-class="text-right" class="q-ml-md">
           <template v-slot:append>
             <q-icon name="search" class="cursor-pointer" @click="submitSearch"/>
           </template>

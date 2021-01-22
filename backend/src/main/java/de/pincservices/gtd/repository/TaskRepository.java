@@ -1,10 +1,12 @@
 package de.pincservices.gtd.repository;
 
+import de.pincservices.gtd.model.Due;
 import de.pincservices.gtd.model.Task;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.Nullable;
 
 public interface TaskRepository extends Neo4jRepository<Task, String> {
     /**
@@ -42,11 +44,18 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
     )
     Iterable<Task> findAllBySummaryOrNotesContains(@Param("searchExpression") String searchExpression, Sort defaultSort);
 
+    /**
+     * Attention: Produces a warning when the type parameter null is, although the query can handle it.
+     * @param type numerical representation of the due type. {@link Due.Type#getOrdering()}
+     * @param date format 'YYYY-MM-DD'
+     * @param sort sorting of the result set
+     * @return tasks
+     */
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
-            + " WHERE n.due_date = date($date) AND ($type = null OR $type = n.due_type)"
+            + " WHERE n.due_date = date($date) AND ($type IS null OR $type = n.due_type)"
             + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`]->()-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
-    Iterable<Task> findAllByDue(@Param("type") Integer type, @Param("date") String date, Sort defaultSort);
+    Iterable<Task> findAllByDue(@Nullable @Param("type") Integer type, @Param("date") String date, Sort sort);
 }

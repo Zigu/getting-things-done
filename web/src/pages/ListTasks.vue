@@ -236,7 +236,7 @@ export default {
       this.$store.dispatch('task/resolve', { task, resolutionValues: unsolvedResolution });
     },
     isOverdue(task) {
-      return task.due.date.isBefore(dayjs().add(2, 'day')) && task.resolution.state === 'UNSOLVED';
+      return task.due.date.isBefore(dayjs()) && task.resolution.state === 'UNSOLVED';
     },
     moodIcon(resolutionState) {
       if (resolutionState === 'solved') {
