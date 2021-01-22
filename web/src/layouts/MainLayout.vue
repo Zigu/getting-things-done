@@ -16,7 +16,11 @@
         </q-toolbar-title>
         <q-space />
 
-        <q-select dense borderless v-model="searchCriterion" :options="searchCriteria" />
+        <q-select dense borderless
+                  v-model="searchCriterion"
+                  :options="searchCriteria"
+                  :option-label="option => $t('search_' + option)"
+        />
         <q-input dense rounded outlined
                  v-model="searchText" input-class="text-right" class="q-ml-md">
           <template v-slot:append>
@@ -118,8 +122,8 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: linksData,
       searchText: '',
-      searchCriterion: 'default',
-      searchCriteria: ['default', 'tag', 'text', 'regex', 'dueDate'],
+      searchCriterion: 'all',
+      searchCriteria: ['all', 'tag', 'text', 'regex', 'due'],
     };
   },
   methods: {

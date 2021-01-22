@@ -17,7 +17,7 @@ public class TaskSearchService {
         finders.put("tag", new TagBasedTaskFinder(taskRepository));
         finders.put("regex", new RegexBasedTaskFinder(taskRepository));
         finders.put("text", new TextBasedTaskFinder(taskRepository));
-        finders.put("dueDate", new DueBasedTaskFinder(taskRepository));
+        finders.put("due", new DueBasedTaskFinder(taskRepository));
     }
 
     public Iterable<Task> findTasks(String searchCriterion, String searchExpression) {

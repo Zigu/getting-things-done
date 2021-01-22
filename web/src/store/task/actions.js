@@ -24,7 +24,8 @@ export function loadAllTasks(context) {
 }
 
 export function search(context, searchParams) {
-  return axios.get(`/tasks?searchCriterion=${searchParams.searchCriterion}&searchExpression=${searchParams.searchExpression}`)
+  const searchExpression = searchParams.searchExpression === 'all' ? 'default' : searchParams.searchExpression;
+  return axios.get(`/tasks?searchCriterion=${searchParams.searchCriterion}&searchExpression=${searchExpression}`)
     .then((response) => {
       const result = response.data;
       context.commit('replaceState', result);
