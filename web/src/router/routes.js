@@ -8,6 +8,8 @@ const routes = [
       { path: 'task/:id', component: () => import('pages/EditTask.vue') },
       { path: 'tasks/:resolutionState', component: () => import('pages/ListTasks.vue') },
       { path: 'tasks', component: () => import('pages/ListTasks.vue') },
+      { path: 'projects', component: () => import('pages/ListProjects.vue') },
+      { path: 'projects/:id', component: () => import('pages/EditProject.vue') },
     ],
   },
 

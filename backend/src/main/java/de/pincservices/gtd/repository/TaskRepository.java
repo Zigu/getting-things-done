@@ -15,7 +15,7 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
      */
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
-            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`]->()-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`*0..]-() | p]}"
+            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]->()-[:`IS_NEXT_OF`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
     Iterable<Task> findAllSortedBy(Sort sort);
@@ -23,7 +23,7 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
             + " WHERE $tag IN n.tags"
-            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`]->()-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`*0..]-() | p]}"
+            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]->()-[:`IS_NEXT_OF`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
     Iterable<Task> findByTagsContains(@Param("tag") String tag, Sort sort);
@@ -31,7 +31,7 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
             + " WHERE n.summary =~ $searchExpression OR n.notes =~ $searchExpression"
-            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`]->()-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`*0..]-() | p]}"
+            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]->()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
     Iterable<Task> findAllBySummaryOrNotesMatches(@Param("searchExpression") String searchExpression, Sort sort);
@@ -39,7 +39,7 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
             + " WHERE n.summary CONTAINS $searchExpression OR n.notes CONTAINS $searchExpression"
-            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`]->()-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`*0..]-() | p]}"
+            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]->()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
     Iterable<Task> findAllBySummaryOrNotesContains(@Param("searchExpression") String searchExpression, Sort defaultSort);
@@ -54,7 +54,7 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
             + " WHERE n.due_date = date($date) AND ($type IS null OR $type = n.due_type)"
-            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`]->()-[:`HAS_DUE`|`HAS_RESOLUTION`|`HAS_PARENT`*0..]-() | p]}"
+            + " RETURN n{.*, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]->()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
     Iterable<Task> findAllByDue(@Nullable @Param("type") Integer type, @Param("date") String date, Sort sort);

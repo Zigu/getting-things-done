@@ -2,7 +2,26 @@
   <q-page class="q-pa-md">
     <div class="column items-start">
       <Progress/>
+      <q-calendar
+        v-if="view=='calendar'"
+        view="month"
+        locale="de-de"
+        bordered
+      >
+        <template #day="{ timestamp }">
+          <template v-for="(task, index) in getTasks(timestamp.date)">
+            <q-badge
+              class="bg-blue-2 text-black full-width"
+              :key="index"
+            >
+              <q-icon v-if="isOverdue(task)" name="alarm" color="red" class="q-mr-xs" />
+              <span>{{ task.summary }}</span>
+            </q-badge>
+          </template>
+        </template>
+      </q-calendar>
       <q-table
+        v-if="view == 'table'"
         grid
         hide-header
         hide-pagination
@@ -25,11 +44,8 @@
           </div>
         </template>
         <template v-slot:item="props">
-          <div
-            class="q-pa-md q-mr-xl fit grid-style-transition"
-            :style="props.selected ? 'transform: scale(0.95);' : ''"
-          >
-            <q-card :class="props.selected ? 'bg-grey-2' : ''">
+          <div class="q-pa-md q-mr-xl fit grid-style-transition">
+            <q-card>
               <q-card-section>
                 <div class="text-h6">
                   <span class="q-pr-md">{{props.row.summary}}</span>
@@ -59,7 +75,8 @@
               </q-card-section>
               <q-separator/>
               <q-card-section class="text-deep-orange-4">
-                {{ props.cols[1].value}}
+                <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}: </span>
+                {{ props.cols[2].value}}
               </q-card-section>
               <q-card-actions align="right">
                 <q-btn size="sm" icon="edit"
@@ -127,6 +144,7 @@ import Progress from 'components/Progress';
 import GtdEditor from 'components/GtdEditor';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
+import QCalendar from '@quasar/quasar-ui-qcalendar';
 
 export default {
   name: 'ListTasks',
@@ -152,6 +170,7 @@ export default {
   },
   data() {
     return {
+      view: 'table',
       loading: true,
       selected: [],
       resolutionPrompt: false,
@@ -174,6 +193,14 @@ export default {
           align: 'left',
           label: this.$t('Notes'),
           field: 'notes',
+          sortable: false,
+        },
+        {
+          name: 'project',
+          align: 'left',
+          label: this.$t('Project'),
+          field: 'project',
+          format: (val) => (val != null ? `${val.name}` : ''),
           sortable: false,
         },
         {
@@ -247,6 +274,10 @@ export default {
         return 'sentiment_satisfied';
       }
       return 'sentiment_very_satisfied';
+    },
+    getTasks(timestamp) {
+      const currentDate = QCalendar.parseTimestamp(timestamp);
+      return this.data.filter((task) => task.due.date.isSame(currentDate.date, 'day'));
     },
   },
 };

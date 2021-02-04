@@ -8,7 +8,6 @@
 /* eslint-env node */
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
-
 module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts

@@ -31,7 +31,6 @@
           </div>
         </template>
       </q-field>
-
       <q-field :label="$t('Due')" :loading="loading" :disable="loading" borderless>
         <div class="q-pa-md full-width">
           <div class="row q-gutter-md">
@@ -53,6 +52,10 @@
           </div>
         </div>
       </q-field>
+      <q-select clearable filled  v-model="project" :options="projects" :label="$t('Project')"
+                :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
+                :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
+      />
       <q-input
         filled
         v-model="tags"
@@ -85,6 +88,11 @@ export default {
     }
     this.loading = false;
   },
+  computed: {
+    projects() {
+      return this.$store.state.project.projects;
+    },
+  },
   data() {
     return {
       loading: true,
@@ -103,6 +111,7 @@ export default {
         date: dayjs(),
         comment: '',
       },
+      project: null,
     };
   },
 
@@ -130,6 +139,7 @@ export default {
           date: dayjs(this.dueDate, 'YYYY-MM-DD'),
         },
         resolution: this.resolution,
+        project: this.project,
       };
       this.$store.dispatch('task/save', task)
         .then(() => {
@@ -167,6 +177,7 @@ export default {
           this.dueType = this.foundTask.due.type;
         }
         this.resolution = this.foundTask.resolution;
+        this.project = this.foundTask.project;
       } else {
         this.id = this.$route.params.id;
         this.version = null;
@@ -175,6 +186,7 @@ export default {
         this.dueDate = dayjs(Date.now()).format('YYYY-MM-DD');
         this.dueType = 'AT';
         this.tags = null;
+        this.project = null;
         this.resolution = {
           state: 'UNSOLVED',
           date: dayjs(),

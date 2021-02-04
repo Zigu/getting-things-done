@@ -70,6 +70,11 @@ const linksData = [
     icon: 'list',
     link: '/tasks/discarded',
   },
+  {
+    title: 'Projects',
+    icon: 'list',
+    link: '/projects',
+  },
 /*  {
     title: 'Docs',
     caption: 'quasar.dev',
