@@ -52,9 +52,9 @@
                   <q-icon name="alarm" color="red" v-if="isOverdue(props.row)" size="md"/>
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
                 </div>
-                <div class="text-subtitle2">{{$t('due')}} {{ props.cols[2].value }}</div>
+                <div class="text-subtitle2">{{$t('due')}} {{ props.cols[3].value }}</div>
                 <div class="text-subtitle2"
-                     v-if="props.row.resolution.state !== 'UNSOLVED'">{{ props.cols[3].value}}</div>
+                     v-if="props.row.resolution.state !== 'UNSOLVED'">{{ props.cols[4].value}}</div>
               </q-card-section>
               <q-separator/>
               <q-card-section>
@@ -75,7 +75,8 @@
               </q-card-section>
               <q-separator/>
               <q-card-section class="text-deep-orange-4">
-                <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}: </span>
+                <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}</span>
+                <span v-if="props.cols[1].value !== '' && props.cols[2].value !== ''">: </span>
                 {{ props.cols[2].value}}
               </q-card-section>
               <q-card-actions align="right">
