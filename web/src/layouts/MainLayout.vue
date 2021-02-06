@@ -2,17 +2,11 @@
   <q-layout view="hHh Lpr lFf">
     <q-header elevated>
       <q-toolbar class="text-green-7 bg-grey-2">
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
-
+        <q-avatar>
+          <q-icon name="assignment_turned_in" />
+        </q-avatar>
         <q-toolbar-title>
-          Getting Things Done
+          <span>Getting Things Done</span>
         </q-toolbar-title>
         <q-space />
 
@@ -31,23 +25,40 @@
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
       show-if-above
       bordered
       content-class="bg-grey-1"
+      :mini="miniState"
     >
-      <q-list>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
+      <q-scroll-area class="fit">
+        <q-list>
+          <EssentialLink
+            v-for="link in essentialLinks"
+            :key="link.title"
+            v-bind="link"
+          />
+        </q-list>
+      </q-scroll-area>
+      <div class="absolute" style="top: 50%; right: -17px">
+        <q-btn
+          dense
+          flat
+          unelevated
+          color="grey"
+          icon="drag_indicator"
+          @click="miniState = !miniState"
         />
-      </q-list>
+      </div>
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-footer elevated class="bg-white">
+      <div class="q-pa-md text-right text-grey-6">
+          v{{ appVersion }}
+      </div>
+    </q-footer>
   </q-layout>
 </template>
 
@@ -127,9 +138,15 @@ const linksData = [
 export default {
   name: 'MainLayout',
   components: { EssentialLink },
+  computed: {
+    appVersion() {
+      return process.env.APP_VERSION;
+    },
+  },
   data() {
     return {
-      leftDrawerOpen: false,
+      leftDrawerOpen: true,
+      miniState: true,
       essentialLinks: linksData,
       searchText: '',
       searchCriterion: 'all',
