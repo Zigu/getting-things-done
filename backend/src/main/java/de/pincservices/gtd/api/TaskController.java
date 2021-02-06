@@ -4,11 +4,15 @@ import de.pincservices.gtd.model.EmbeddedResolution;
 import de.pincservices.gtd.model.Task;
 import de.pincservices.gtd.repository.TaskRepository;
 import de.pincservices.gtd.service.TaskSearchService;
-import org.springframework.data.domain.Sort;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -50,6 +54,25 @@ public class TaskController {
 
     @DeleteMapping("/tasks/{id}")
     public void deleteTask(@PathVariable("id") String taskId) {
-        taskRepository.deleteById(taskId);
+        Optional<Task> foundTask = taskRepository.findById(taskId);
+        // connect previous tasks with next tasks to keep chain alive
+        if (foundTask.isPresent()) {
+            Task taskToDelete = foundTask.get();
+            Collection<String> previousTaskIds = taskToDelete.getPreviousTasks().stream().map(Task::getId).collect(Collectors.toSet());
+            if (!CollectionUtils.isEmpty(previousTaskIds)) {
+                Iterable<Task> nextTasks = taskRepository.findAllByPreviousTasksContains(taskToDelete.getId());
+                if (nextTasks != null) {
+                    nextTasks.forEach(nextTask -> {
+                        // Required because neo4j updates the versions of related entities
+                        List<Task> previousTasks = taskRepository.findAllById(previousTaskIds);
+                        nextTask.getPreviousTasks().remove(taskToDelete);
+                        nextTask.getPreviousTasks().addAll(previousTasks);
+                        taskRepository.save(nextTask);
+                    });
+                }
+            }
+            taskRepository.deleteById(taskId);
+        }
+
     }
 }

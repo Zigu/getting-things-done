@@ -17,6 +17,10 @@ export function mapTask(task) {
       comment: task.resolution.comment,
     };
   }
+  let mappedPreviousTasks = [];
+  if (task.previousTasks != null) {
+    mappedPreviousTasks = task.previousTasks.map((pt) => mapTask(pt));
+  }
   return {
     id: task.id,
     version: task.version,
@@ -26,6 +30,7 @@ export function mapTask(task) {
     project: task.project,
     due: mappedDue,
     resolution: mappedResolution,
+    previousTasks: mappedPreviousTasks,
   };
 }
 

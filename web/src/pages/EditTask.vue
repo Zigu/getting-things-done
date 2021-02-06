@@ -119,12 +119,13 @@ export default {
     onSubmit() {
       const splittedTags = this.tags != null ? this.tags.split(',')
         .map((item) => item.trim()) : [];
-      let parentTasks = [];
+      let previousTasks = [];
       if (this.parentId != null) {
-        const foundParentTasks = this.$store.state.task.tasks.filter((t) => t.id === this.parentId);
-        if (foundParentTasks.length === 1) {
+        const foundPreviousTasks = this.$store.state.task.tasks
+          .filter((t) => t.id === this.parentId);
+        if (foundPreviousTasks.length === 1) {
           // eslint-disable-next-line prefer-destructuring
-          parentTasks = foundParentTasks;
+          previousTasks = foundPreviousTasks;
         }
       }
       const task = {
@@ -133,7 +134,7 @@ export default {
         notes: this.notes,
         summary: this.summary,
         tags: splittedTags,
-        parents: parentTasks,
+        previousTasks,
         due: {
           type: this.dueType,
           date: dayjs(this.dueDate, 'YYYY-MM-DD'),

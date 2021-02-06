@@ -19,7 +19,7 @@ public class DueBasedTaskFinder extends TaskFinder {
         String[] parts = searchExpression.split(":", 2);
 
         Integer type = null;
-        String date = null;
+        String date;
 
         if (parts.length == 2) {
 

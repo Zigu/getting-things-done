@@ -241,12 +241,15 @@ export default {
     },
     resolve(store) {
       if (store) {
-        this.$store.dispatch('task/resolve', { task: this.taskToSolve, resolutionValues: this.modalResolution });
+        this.$store.dispatch('task/resolve', { task: this.taskToSolve, resolutionValues: this.modalResolution })
+          .then(() => {
+            this.modalResolution = { state: 'SOLVED', comment: '' };
+            const indexOf = this.data.indexOf(this.taskToSolve);
+            this.data.splice(indexOf, 1);
+            this.taskToSolve = null;
+            this.resolutionPrompt = false;
+          });
       }
-      this.modalResolution = { state: 'SOLVED', comment: '' };
-      this.data.splice(this.taskToSolve, 1);
-      this.taskToSolve = null;
-      this.resolutionPrompt = false;
     },
     resolvedWithComment(props) {
       return props.row.resolution.state !== 'UNSOLVED'
