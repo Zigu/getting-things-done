@@ -143,7 +143,7 @@ export default {
       };
       this.$store.dispatch('task/save', task)
         .then(() => {
-          this.$router.push('/tasks/unsolved');
+          this.$router.go(-1);
           const translatedMessage = this.$t('Submitted');
           this.$q.notify({
             color: 'green-4',

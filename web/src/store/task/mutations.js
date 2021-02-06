@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { mapTask } from 'src/boot/utils';
 
 export function saveTask(state, task) {
   const foundTasks = state.tasks.filter((t) => t.id === task.id);
@@ -17,32 +17,6 @@ export function resolve(state, { task, resolution }) {
 }
 
 export function replaceState(state, tasks) {
-  const newState = tasks.map((task) => {
-    let mappedDue = null;
-    if (task.due != null) {
-      mappedDue = {
-        date: dayjs(task.due.date, 'YYYY-MM-DD'),
-        type: task.due.type,
-      };
-    }
-    let mappedResolution = null;
-    if (task.resolution != null) {
-      mappedResolution = {
-        date: dayjs(task.resolution.date, 'YYYY-MM-DD'),
-        state: task.resolution.state,
-        comment: task.resolution.comment,
-      };
-    }
-    return {
-      id: task.id,
-      version: task.version,
-      summary: task.summary,
-      notes: task.notes,
-      tags: task.tags,
-      project: task.project,
-      due: mappedDue,
-      resolution: mappedResolution,
-    };
-  });
+  const newState = tasks.map((task) => mapTask(task));
   state.tasks.splice(0, state.tasks.length, ...newState);
 }

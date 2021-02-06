@@ -37,6 +37,7 @@ export default {
   'Solved Tasks': 'Erledigte Aufgaben',
   'Discarded Tasks': 'Verworfene Aufgaben',
   'Open Tasks': 'Offene Aufgaben',
+  'Open Tasks Today': 'Offene Aufgabe für heute',
   search_all: 'Alle',
   search_tag: 'Tag',
   search_regex: 'RegEx',

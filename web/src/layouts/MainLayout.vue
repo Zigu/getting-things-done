@@ -56,23 +56,28 @@ import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
   {
+    title: 'Open Tasks Today',
+    icon: 'alarm',
+    link: '/tasks/today',
+  },
+  {
     title: 'Open Tasks',
-    icon: 'list',
+    icon: 'pending_actions',
     link: '/tasks/unsolved',
   },
   {
     title: 'Solved Tasks',
-    icon: 'list',
+    icon: 'fact_check',
     link: '/tasks/solved',
   },
   {
     title: 'Discarded Tasks',
-    icon: 'list',
+    icon: 'remove_done',
     link: '/tasks/discarded',
   },
   {
     title: 'Projects',
-    icon: 'list',
+    icon: 'scatter_plot',
     link: '/projects',
   },
 /*  {
