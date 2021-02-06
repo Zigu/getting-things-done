@@ -2,6 +2,10 @@
  * This file runs in a Node context (it's NOT transpiled by Babel), so use only
  * the ES6 features that are supported by your Node version. https://node.green/
  */
+const fs = require('fs');
+
+const packageJson = fs.readFileSync('./package.json');
+const version = JSON.parse(packageJson).version || 0;
 
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
@@ -49,6 +53,7 @@ module.exports = function (ctx) {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       env: {
         AXIOS_BACKEND_URL: ctx.dev ? 'http://localhost:8082' : process.env.BACKEND_URL,
+        APP_VERSION: version,
       },
       // transpile: false,
 
