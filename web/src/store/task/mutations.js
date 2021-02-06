@@ -20,3 +20,10 @@ export function replaceState(state, tasks) {
   const newState = tasks.map((task) => mapTask(task));
   state.tasks.splice(0, state.tasks.length, ...newState);
 }
+
+export function deleteTask(state, task) {
+  const index = state.tasks.indexOf(task);
+  if (index > -1) {
+    state.tasks.splice(index, 1);
+  }
+}

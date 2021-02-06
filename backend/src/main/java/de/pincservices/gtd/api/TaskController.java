@@ -47,4 +47,9 @@ public class TaskController {
                 taskSearchService.findTasks(searchCriterion, searchExpression) :
                 taskSearchService.findTasks("default", null);
     }
+
+    @DeleteMapping("/tasks/{id}")
+    public void deleteTask(@PathVariable("id") String taskId) {
+        taskRepository.deleteById(taskId);
+    }
 }

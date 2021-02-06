@@ -48,7 +48,10 @@
             <q-card>
               <q-card-section>
                 <div class="text-h6">
-                  <span class="q-pr-md">{{props.row.summary}}</span>
+                  <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}: </span>
+                  <span class="q-pr-md">
+                    {{props.row.summary}}
+                  </span>
                   <q-icon name="alarm" color="red" v-if="isOverdue(props.row)" size="md"/>
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
                 </div>
@@ -70,13 +73,11 @@
               </q-card-section>
               <q-separator v-if="resolvedWithComment(props)"/>
               <q-card-section v-if="resolvedWithComment(props)">
-                <p><b>{{$t('Resolution')}}</b></p>
+                <p><strong>{{$t('Resolution')}}</strong></p>
                 <div v-html="props.row.resolution.comment" />
               </q-card-section>
               <q-separator/>
               <q-card-section class="text-deep-orange-4">
-                <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}</span>
-                <span v-if="props.cols[1].value !== '' && props.cols[2].value !== ''">: </span>
                 {{ props.cols[2].value}}
               </q-card-section>
               <q-card-actions align="right">
@@ -95,6 +96,12 @@
                        color="secondary"
                        :disable="selected.length != 0"
                        @click="unsolve(props.row)"
+                       v-if="props.row.resolution.state !== 'UNSOLVED'"
+                />
+                <q-btn size="sm" icon="delete"
+                       color="red"
+                       :disable="selected.length != 0"
+                       @click="deleteTask(props.row)"
                        v-if="props.row.resolution.state !== 'UNSOLVED'"
                 />
                 <q-btn size="sm" icon="done"
@@ -262,6 +269,9 @@ export default {
     unsolve(task) {
       const unsolvedResolution = { state: 'UNSOLVED', comment: '' };
       this.$store.dispatch('task/resolve', { task, resolutionValues: unsolvedResolution });
+    },
+    deleteTask(task) {
+      this.$store.dispatch('task/deleteTask', task);
     },
     isOverdue(task) {
       return task.due.date.isBefore(dayjs()) && task.resolution.state === 'UNSOLVED';

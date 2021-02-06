@@ -32,3 +32,9 @@ export function search(context, searchParams) {
       context.commit('replaceState', result);
     });
 }
+
+export function deleteTask(context, task) {
+  return axios.delete(`/tasks/${task.id}`).then(() => {
+    context.commit('deleteTask', task);
+  });
+}

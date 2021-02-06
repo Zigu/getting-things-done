@@ -47,6 +47,7 @@
             <q-card>
               <q-card-section>
                 <div class="text-h6">
+                  <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}: </span>
                   <span class="q-pr-md">{{props.row.summary}}</span>
                   <q-icon name="alarm" color="red" v-if="isOverdue(props.row)" size="md"/>
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
@@ -74,8 +75,6 @@
               </q-card-section>
               <q-separator/>
               <q-card-section class="text-deep-orange-4">
-                <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}</span>
-                <span v-if="props.cols[1].value !== '' && props.cols[2].value !== ''">: </span>
                 {{ props.cols[2].value}}
               </q-card-section>
               <q-card-actions align="right">
@@ -245,6 +244,7 @@ export default {
         this.$store.dispatch('task/resolve', { task: this.taskToSolve, resolutionValues: this.modalResolution });
       }
       this.modalResolution = { state: 'SOLVED', comment: '' };
+      this.data.splice(this.taskToSolve, 1);
       this.taskToSolve = null;
       this.resolutionPrompt = false;
     },

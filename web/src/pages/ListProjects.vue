@@ -35,9 +35,9 @@
                        color="primary"
                        :to="getEditLink(props)"
                 />
-                <q-btn size="sm" icon="list"
+                <!--q-btn size="sm" icon="list"
                        color="secondary"
-                />
+                /-->
               </q-card-actions>
             </q-card>
           </div>
