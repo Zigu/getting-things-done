@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="text-green-7 bg-grey-2">
         <q-btn
           flat
           dense
@@ -14,6 +14,19 @@
         <q-toolbar-title>
           Getting Things Done
         </q-toolbar-title>
+        <q-space />
+
+        <q-select dense borderless
+                  v-model="searchCriterion"
+                  :options="searchCriteria"
+                  :option-label="option => $t('search_' + option)"
+        />
+        <q-input dense rounded outlined
+                 v-model="searchText" input-class="text-right" class="q-ml-md">
+          <template v-slot:append>
+            <q-icon name="search" class="cursor-pointer" @click="submitSearch"/>
+          </template>
+        </q-input>
       </q-toolbar>
     </q-header>
 
@@ -43,19 +56,29 @@ import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
   {
+    title: 'Open Tasks Today',
+    icon: 'alarm',
+    link: '/tasks/today',
+  },
+  {
     title: 'Open Tasks',
-    icon: 'list',
+    icon: 'pending_actions',
     link: '/tasks/unsolved',
   },
   {
     title: 'Solved Tasks',
-    icon: 'list',
+    icon: 'fact_check',
     link: '/tasks/solved',
   },
   {
     title: 'Discarded Tasks',
-    icon: 'list',
+    icon: 'remove_done',
     link: '/tasks/discarded',
+  },
+  {
+    title: 'Projects',
+    icon: 'scatter_plot',
+    link: '/projects',
   },
 /*  {
     title: 'Docs',
@@ -108,7 +131,19 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
+      searchText: '',
+      searchCriterion: 'all',
+      searchCriteria: ['all', 'tag', 'text', 'regex', 'due'],
     };
+  },
+  methods: {
+    submitSearch() {
+      const params = {
+        searchExpression: this.searchText,
+        searchCriterion: this.searchCriterion,
+      };
+      this.$store.dispatch('task/search', params);
+    },
   },
 };
 </script>

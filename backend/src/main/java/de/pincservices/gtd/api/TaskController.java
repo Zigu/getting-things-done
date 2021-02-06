@@ -3,7 +3,9 @@ package de.pincservices.gtd.api;
 import de.pincservices.gtd.model.EmbeddedResolution;
 import de.pincservices.gtd.model.Task;
 import de.pincservices.gtd.repository.TaskRepository;
+import de.pincservices.gtd.service.TaskSearchService;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -13,9 +15,11 @@ import javax.annotation.PostConstruct;
 public class TaskController {
 
     private final TaskRepository taskRepository;
+    private final TaskSearchService taskSearchService;
 
-    public TaskController(TaskRepository taskRepository) {
+    public TaskController(TaskRepository taskRepository, TaskSearchService taskSearchService) {
         this.taskRepository = taskRepository;
+        this.taskSearchService = taskSearchService;
     }
 
     @PostConstruct
@@ -36,8 +40,16 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public Iterable<Task> getTasks() {
-        return taskRepository.findAllSortedBy(Sort.by("n.due_date").ascending()
-                                                .and(Sort.by("n.due_type").ascending()));
+    public Iterable<Task> getTasks(@RequestParam(value = "searchCriterion", required = false) String searchCriterion,
+                                   @RequestParam(value = "searchExpression", required = false) String searchExpression) {
+
+        return StringUtils.hasText(searchCriterion) ?
+                taskSearchService.findTasks(searchCriterion, searchExpression) :
+                taskSearchService.findTasks("default", null);
+    }
+
+    @DeleteMapping("/tasks/{id}")
+    public void deleteTask(@PathVariable("id") String taskId) {
+        taskRepository.deleteById(taskId);
     }
 }

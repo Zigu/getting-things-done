@@ -30,6 +30,9 @@ public class Task {
     private String notes;
     private Set<String> tags;
 
+    @Relationship(type = "BELONGS_TO", direction = OUTGOING)
+    private Project project;
+
     @Relationship(type = "IS_NEXT_OF", direction = INCOMING)
     private Collection<Task> previousTasks;
 

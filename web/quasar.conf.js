@@ -8,7 +8,6 @@
 /* eslint-env node */
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
-
 module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
@@ -21,7 +20,7 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-
+      'utils',
       'i18n',
       'axios',
     ],

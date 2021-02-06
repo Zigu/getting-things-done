@@ -1,7 +1,6 @@
 <template>
   <q-page class="q-pa-md">
     <div class="column items-start">
-      <Progress/>
       <q-calendar
         v-if="view=='calendar'"
         view="month"
@@ -36,9 +35,9 @@
       >
         <template v-slot:no-data="{ icon, message, filter }">
           <div class="full-width row flex-center text-green bg-white q-gutter-sm">
-            <q-icon size="2em" :name="moodIcon(requestedResolutionState)" />
+            <q-icon size="2em" :name="moodIcon('unsolved')" />
             <span>
-            {{ $t(`You do not have any ${requestedResolutionState} tasks.`) }} ({{ $t(message) }})
+            {{ $t(`You do not have any unsolved tasks.`) }} ({{ $t(message) }})
           </span>
             <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon" />
           </div>
@@ -49,9 +48,7 @@
               <q-card-section>
                 <div class="text-h6">
                   <span v-if="props.cols[1].value !== ''">{{ props.cols[1].value}}: </span>
-                  <span class="q-pr-md">
-                    {{props.row.summary}}
-                  </span>
+                  <span class="q-pr-md">{{props.row.summary}}</span>
                   <q-icon name="alarm" color="red" v-if="isOverdue(props.row)" size="md"/>
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
                 </div>
@@ -73,7 +70,7 @@
               </q-card-section>
               <q-separator v-if="resolvedWithComment(props)"/>
               <q-card-section v-if="resolvedWithComment(props)">
-                <p><strong>{{$t('Resolution')}}</strong></p>
+                <p><b>{{$t('Resolution')}}</b></p>
                 <div v-html="props.row.resolution.comment" />
               </q-card-section>
               <q-separator/>
@@ -96,12 +93,6 @@
                        color="secondary"
                        :disable="selected.length != 0"
                        @click="unsolve(props.row)"
-                       v-if="props.row.resolution.state !== 'UNSOLVED'"
-                />
-                <q-btn size="sm" icon="delete"
-                       color="red"
-                       :disable="selected.length != 0"
-                       @click="deleteTask(props.row)"
                        v-if="props.row.resolution.state !== 'UNSOLVED'"
                 />
                 <q-btn size="sm" icon="done"
@@ -148,7 +139,6 @@
 </template>
 
 <script>
-import Progress from 'components/Progress';
 import GtdEditor from 'components/GtdEditor';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
@@ -156,23 +146,17 @@ import QCalendar from '@quasar/quasar-ui-qcalendar';
 
 export default {
   name: 'ListTasks',
-  components: { Progress, GtdEditor },
+  components: { GtdEditor },
   computed: {
-    data() {
-      const { resolutionState } = this.$route.params;
-      if (resolutionState) {
-        const comparisonState = resolutionState.toUpperCase();
-        return this.$store.state.task.tasks
-          .filter((t) => t.resolution != null && t.resolution.state === comparisonState);
-      }
-      return this.$store.state.task.tasks;
-    },
-    requestedResolutionState() {
-      return this.$route.params.resolutionState;
-    },
   },
   mounted() {
-    this.$store.dispatch('task/loadAllTasks').then(() => {
+    const today = dayjs().format('YYYY-MM-DD');
+    this.$axios.get(`/tasks?searchCriterion=due&searchExpression=${today}`).then((response) => {
+      const result = response.data;
+      const comparisonState = 'UNSOLVED';
+      this.data = result
+        .filter((t) => t.resolution != null && t.resolution.state === comparisonState)
+        .map((task) => this.$mapTask(task));
       this.loading = false;
     });
   },
@@ -181,6 +165,7 @@ export default {
       view: 'table',
       loading: true,
       selected: [],
+      data: [],
       resolutionPrompt: false,
       modalResolution: { state: 'SOLVED', comment: '' },
       taskToSolve: null,
@@ -259,6 +244,7 @@ export default {
         this.$store.dispatch('task/resolve', { task: this.taskToSolve, resolutionValues: this.modalResolution });
       }
       this.modalResolution = { state: 'SOLVED', comment: '' };
+      this.data.splice(this.taskToSolve, 1);
       this.taskToSolve = null;
       this.resolutionPrompt = false;
     },
@@ -270,11 +256,8 @@ export default {
       const unsolvedResolution = { state: 'UNSOLVED', comment: '' };
       this.$store.dispatch('task/resolve', { task, resolutionValues: unsolvedResolution });
     },
-    deleteTask(task) {
-      this.$store.dispatch('task/deleteTask', task);
-    },
     isOverdue(task) {
-      return task.due.date.isBefore(dayjs()) && task.resolution.state === 'UNSOLVED';
+      return task.due.date.isBefore(dayjs().subtract(1, 'day')) && task.resolution.state === 'UNSOLVED';
     },
     moodIcon(resolutionState) {
       if (resolutionState === 'solved') {
