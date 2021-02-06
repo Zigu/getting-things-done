@@ -6,6 +6,7 @@ const fs = require('fs');
 
 const packageJson = fs.readFileSync('./package.json');
 const version = JSON.parse(packageJson).version || 0;
+const productName = JSON.parse(packageJson).productName;
 
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
@@ -54,6 +55,7 @@ module.exports = function (ctx) {
       env: {
         AXIOS_BACKEND_URL: ctx.dev ? 'http://localhost:8082' : process.env.BACKEND_URL,
         APP_VERSION: version,
+        APP_NAME: productName,
       },
       // transpile: false,
 
