@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 export function save(context, task) {
   return axios.post('/tasks', task)
-    .then(() => context.commit('saveTask', task))
+    .then(() => context.dispatch('loadAllTasks'))
     .then(() => context.dispatch('project/loadAllProjects', {}, { root: true }));
 }
 

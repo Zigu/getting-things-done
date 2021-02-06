@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { i18n } from 'src/boot/i18n';
 
 import routes from './routes';
 
@@ -24,6 +25,21 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE,
+  });
+
+  Router.afterEach((to) => {
+    // Use next tick to handle router history correctly
+    // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
+    Vue.nextTick(() => {
+      let documentTitle = to.meta.title;
+      if (documentTitle.indexOf('$') > -1) {
+        const paramKeys = Object.keys(to.params);
+        paramKeys.forEach((key) => {
+          documentTitle = documentTitle.replace(`$${key}`, to.params[key]);
+        });
+      }
+      document.title = i18n.t(documentTitle, to.params) || process.env.APP_NAME;
+    });
   });
 
   return Router;
