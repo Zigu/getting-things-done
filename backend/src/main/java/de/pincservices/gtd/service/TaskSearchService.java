@@ -2,6 +2,7 @@ package de.pincservices.gtd.service;
 
 import de.pincservices.gtd.model.Task;
 import de.pincservices.gtd.repository.TaskRepository;
+import de.pincservices.gtd.repository.TopicRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,12 +13,14 @@ public class TaskSearchService {
 
     private final Map<String, TaskFinder> finders = new HashMap<>();
 
-    public TaskSearchService(TaskRepository taskRepository) {
+    public TaskSearchService(TaskRepository taskRepository, TopicRepository topicRepository) {
         finders.put("default", new DefaultTaskFinder(taskRepository));
         finders.put("tag", new TagBasedTaskFinder(taskRepository));
         finders.put("regex", new RegexBasedTaskFinder(taskRepository));
         finders.put("text", new TextBasedTaskFinder(taskRepository));
         finders.put("due", new DueBasedTaskFinder(taskRepository));
+        finders.put("until_due", new UntilDueBasedTaskFinder(taskRepository));
+        finders.put("topic", new TopicBasedTaskFinder(taskRepository, topicRepository));
     }
 
     public Iterable<Task> findTasks(String searchCriterion, String searchExpression) {

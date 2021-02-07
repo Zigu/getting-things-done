@@ -66,4 +66,20 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
             + " RETURN n{.*, __allProperties__: n{.*}, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]-()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
     )
     Iterable<Task> findAllByPreviousTasksContains(@Param("id") String id);
+
+    @Query("MATCH (n:Task)"
+            + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
+            + " WHERE n.due_date <= date($date)"
+            + " RETURN n{.*, __allProperties__: n{.*}, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]-()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
+            + " :#{orderBy(#sort)}"
+    )
+    Iterable<Task> findAllByDueBefore(@Param("date") String date, Sort sort);
+
+    @Query("MATCH (n:Task)-[:BELONGS_TO]-(t:Topic)"
+            + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
+            + " WHERE t.id = $topicId"
+            + " RETURN n{.*, __allProperties__: n{.*}, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]-()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
+            + " :#{orderBy(#sort)}"
+    )
+    Iterable<Task> findAllByTopic(@Param("topicId") String topicId, Sort sort);
 }

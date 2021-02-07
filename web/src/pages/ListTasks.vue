@@ -172,9 +172,14 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('task/loadAllTasks').then(() => {
+    if (!this.$store.state.task.search.applied) {
+      this.$store.dispatch('task/loadAllTasks')
+        .then(() => {
+          this.loading = false;
+        });
+    } else {
       this.loading = false;
-    });
+    }
   },
   data() {
     return {
@@ -204,10 +209,10 @@ export default {
           sortable: false,
         },
         {
-          name: 'project',
+          name: 'topic',
           align: 'left',
-          label: this.$t('Project'),
-          field: 'project',
+          label: this.$t('Topic'),
+          field: 'topic',
           format: (val) => (val != null ? `${val.name}` : ''),
           sortable: false,
         },

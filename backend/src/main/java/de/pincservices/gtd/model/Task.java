@@ -8,10 +8,8 @@ import org.springframework.data.annotation.Persistent;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.neo4j.core.schema.CompositeProperty;
-import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
@@ -31,7 +29,7 @@ public class Task {
     private Set<String> tags;
 
     @Relationship(type = "BELONGS_TO", direction = OUTGOING)
-    private Project project;
+    private Topic topic;
 
     @Relationship(type = "IS_NEXT_OF", direction = INCOMING)
     private Collection<Task> previousTasks;
@@ -43,7 +41,7 @@ public class Task {
     @CompositeProperty(converter = DueToMapConverter.class, delimiter = "_")
     private EmbeddedDue due;
 
-    @CompositeProperty(converter = ResolutionToMapConverter.class,  delimiter = "_")
+    @CompositeProperty(converter = ResolutionToMapConverter.class, delimiter = "_")
     private EmbeddedResolution resolution;
 
 }

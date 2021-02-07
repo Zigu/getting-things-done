@@ -45,7 +45,7 @@
       </q-table>
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab icon="add" color="secondary" :to="getNewLink()" />
+      <q-btn fab icon="post_add" color="secondary" :to="getNewLink()" />
     </q-page-sticky>
   </q-page>
 </template>
@@ -54,14 +54,14 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
-  name: 'ListTasks',
+  name: 'ListTopics',
   computed: {
     data() {
-      return this.$store.state.project.projects;
+      return this.$store.state.topic.topics;
     },
   },
   mounted() {
-    this.$store.dispatch('project/loadAllProjects').then(() => {
+    this.$store.dispatch('topic/loadAllTopics').then(() => {
       this.loading = false;
     });
   },
@@ -80,10 +80,10 @@ export default {
   },
   methods: {
     getEditLink(props) {
-      return `/projects/${props.row.id}`;
+      return `/topics/${props.row.id}`;
     },
     getNewLink() {
-      return `/projects/${uuidv4()}`;
+      return `/topics/${uuidv4()}`;
     },
   },
 };
