@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 export function save(context, task) {
   return axios.post('/tasks', task)
     .then(() => context.dispatch('search', { searchCriterion: context.state.search.criterion, searchExpression: context.state.search.expression }))
-    .then(() => context.dispatch('topic/loadAllPTopics', {}, { root: true }));
+    .then(() => context.dispatch('topic/loadAllTopics', {}, { root: true }));
 }
 
 export function resolve(context, { task, resolutionValues }) {
@@ -15,7 +15,7 @@ export function resolve(context, { task, resolutionValues }) {
   };
   return axios.post(`tasks/${task.id}/resolution`, resolution)
     .then(() => context.dispatch('search', { searchCriterion: context.state.search.criterion, searchExpression: context.state.search.expression }))
-    .then(() => context.dispatch('topic/loadAllTopic', {}, { root: true }));
+    .then(() => context.dispatch('topic/loadAllTopics', {}, { root: true }));
 }
 
 export function loadAllTasks(context) {
