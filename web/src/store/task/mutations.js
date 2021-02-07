@@ -21,6 +21,10 @@ export function replaceState(state, tasks) {
   state.tasks.splice(0, state.tasks.length, ...newState);
 }
 
+export function searchApplied(state, value) {
+  state.searchApplied = value;
+}
+
 export function deleteTask(state, task) {
   const index = state.tasks.indexOf(task);
   if (index > -1) {

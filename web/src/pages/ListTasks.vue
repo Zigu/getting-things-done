@@ -172,9 +172,14 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('task/loadAllTasks').then(() => {
+    if (!this.$store.state.task.searchApplied) {
+      this.$store.dispatch('task/loadAllTasks')
+        .then(() => {
+          this.loading = false;
+        });
+    } else {
       this.loading = false;
-    });
+    }
   },
   data() {
     return {

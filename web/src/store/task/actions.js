@@ -21,6 +21,7 @@ export function loadAllTasks(context) {
   return axios.get('/tasks').then((response) => {
     const result = response.data;
     context.commit('replaceState', result);
+    context.commit('searchApplied', false);
   });
 }
 
@@ -30,6 +31,7 @@ export function search(context, searchParams) {
     .then((response) => {
       const result = response.data;
       context.commit('replaceState', result);
+      context.commit('searchApplied', (searchCriterion !== 'default'));
     });
 }
 

@@ -16,8 +16,11 @@
                   :option-label="option => $t('search_' + option)"
         />
         <q-input dense rounded outlined
+                 :disable="searchCriterion === 'all'"
                  v-model="searchText" input-class="text-right" class="q-ml-md">
           <template v-slot:append>
+            <q-icon v-if="searchText" name="cancel"
+                    @click.stop="searchAll()" class="cursor-pointer" />
             <q-icon name="search" class="cursor-pointer" @click="submitSearch"/>
           </template>
         </q-input>
@@ -150,7 +153,7 @@ export default {
       essentialLinks: linksData,
       searchText: '',
       searchCriterion: 'all',
-      searchCriteria: ['all', 'tag', 'text', 'regex', 'due'],
+      searchCriteria: ['all', 'tag', 'text', 'regex', 'due', 'project'],
     };
   },
   methods: {
@@ -160,6 +163,11 @@ export default {
         searchCriterion: this.searchCriterion,
       };
       this.$store.dispatch('task/search', params);
+    },
+    searchAll() {
+      this.searchText = '';
+      this.searchCriterion = 'all';
+      this.submitSearch();
     },
   },
 };

@@ -74,4 +74,12 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
             + " :#{orderBy(#sort)}"
     )
     Iterable<Task> findAllByDueBefore(@Param("date") String date, Sort sort);
+
+    @Query("MATCH (n:Task)-[:BELONGS_TO]-(p:Project)"
+            + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
+            + " WHERE p.id = $projectId"
+            + " RETURN n{.*, __allProperties__: n{.*}, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]-()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
+            + " :#{orderBy(#sort)}"
+    )
+    Iterable<Task> findAllByProject(@Param("projectId") String projectId, Sort sort);
 }

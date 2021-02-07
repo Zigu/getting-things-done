@@ -1,6 +1,3 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
   failed: 'Aktion fehlgeschlagen.',
   success: 'Aktion erfolgreich.',
@@ -46,6 +43,7 @@ export default {
   search_regex: 'RegEx',
   search_text: 'Text',
   search_due: 'Fälligkeit',
+  search_project: 'Projekt',
   'Name *': 'Name *',
   Name: 'Name',
   Project: 'Projekt',

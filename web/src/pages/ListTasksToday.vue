@@ -148,25 +148,39 @@ export default {
   name: 'ListTasks',
   components: { GtdEditor },
   computed: {
+    data() {
+      let result = [];
+      const queryDate = this.getQueryDate();
+      if (this.$store.state.task.searchApplied) {
+        result = this.$store.state.task.tasks.filter((task) => {
+          if (task.resolution.state !== 'UNSOLVED') {
+            return false;
+          }
+          return queryDate.isSame(task.due.date) || queryDate.isAfter(task.due.date);
+        });
+      } else {
+        result = this.loadedData;
+      }
+      return result;
+    },
   },
   mounted() {
-    const today = dayjs();
-    const queryDate = (today.day() >= 1 && today.day() <= 5) ? today : today.add((8 - today.day()) % 7, 'day');
-    this.$axios.get(`/tasks?searchCriterion=until_due&searchExpression=${queryDate.format('YYYY-MM-DD')}`).then((response) => {
-      const result = response.data;
-      const comparisonState = 'UNSOLVED';
-      this.data = result
-        .filter((t) => t.resolution != null && t.resolution.state === comparisonState)
-        .map((task) => this.$mapTask(task));
-      this.loading = false;
-    });
+    this.$axios.get(`/tasks?searchCriterion=until_due&searchExpression=${this.getQueryDate().format('YYYY-MM-DD')}`)
+      .then((response) => {
+        const result = response.data;
+        const comparisonState = 'UNSOLVED';
+        this.loadedData = result
+          .filter((t) => t.resolution != null && t.resolution.state === comparisonState)
+          .map((task) => this.$mapTask(task));
+        this.loading = false;
+      });
   },
   data() {
     return {
       view: 'table',
       loading: true,
       selected: [],
-      data: [],
+      loadedData: [],
       resolutionPrompt: false,
       modalResolution: { state: 'SOLVED', comment: '' },
       taskToSolve: null,
@@ -276,6 +290,10 @@ export default {
     getTasks(timestamp) {
       const currentDate = QCalendar.parseTimestamp(timestamp);
       return this.data.filter((task) => task.due.date.isSame(currentDate.date, 'day'));
+    },
+    getQueryDate() {
+      const today = dayjs();
+      return (today.day() >= 1 && today.day() <= 5) ? today : today.add((8 - today.day()) % 7, 'day');
     },
   },
 };
