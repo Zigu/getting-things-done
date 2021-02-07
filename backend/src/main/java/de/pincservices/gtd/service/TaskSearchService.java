@@ -18,6 +18,7 @@ public class TaskSearchService {
         finders.put("regex", new RegexBasedTaskFinder(taskRepository));
         finders.put("text", new TextBasedTaskFinder(taskRepository));
         finders.put("due", new DueBasedTaskFinder(taskRepository));
+        finders.put("until_due", new UntilDueBasedTaskFinder(taskRepository));
     }
 
     public Iterable<Task> findTasks(String searchCriterion, String searchExpression) {

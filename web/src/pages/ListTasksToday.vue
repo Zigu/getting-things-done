@@ -150,8 +150,9 @@ export default {
   computed: {
   },
   mounted() {
-    const today = dayjs().format('YYYY-MM-DD');
-    this.$axios.get(`/tasks?searchCriterion=due&searchExpression=${today}`).then((response) => {
+    const today = dayjs();
+    const queryDate = (today.day() >= 1 && today.day() <= 5) ? today : today.add((8 - today.day()) % 7, 'day');
+    this.$axios.get(`/tasks?searchCriterion=until_due&searchExpression=${queryDate.format('YYYY-MM-DD')}`).then((response) => {
       const result = response.data;
       const comparisonState = 'UNSOLVED';
       this.data = result
