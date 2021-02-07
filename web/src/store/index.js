@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import task from './task';
 import topic from './topic';
+import settings from './settings';
 
 // import example from './module-example'
 
@@ -21,6 +22,7 @@ export default function (/* { ssrContext } */) {
     modules: {
       task,
       topic,
+      settings,
     },
 
     // enable strict mode (adds overhead!)

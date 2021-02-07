@@ -36,7 +36,13 @@
       <q-scroll-area class="fit">
         <q-list>
           <EssentialLink
-            v-for="link in essentialLinks"
+            v-for="link in entityLinks"
+            :key="link.title"
+            v-bind="link"
+          />
+          <q-separator />
+          <EssentialLink
+            v-for="link in appLinks"
             :key="link.title"
             v-bind="link"
           />
@@ -68,7 +74,7 @@
 <script>
 import EssentialLink from 'components/EssentialLink.vue';
 
-const linksData = [
+const entityLinks = [
   {
     title: 'Open Tasks Today',
     icon: 'alarm',
@@ -94,48 +100,14 @@ const linksData = [
     icon: 'topic',
     link: '/topics',
   },
-/*  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
+];
+
+const appLinks = [
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
+    title: 'Settings',
+    icon: 'settings',
+    link: '/settings',
   },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  }, */
 ];
 
 export default {
@@ -150,7 +122,8 @@ export default {
     return {
       leftDrawerOpen: true,
       miniState: true,
-      essentialLinks: linksData,
+      entityLinks,
+      appLinks,
       searchText: '',
       searchCriterion: 'all',
       searchCriteria: ['all', 'tag', 'text', 'regex', 'due', 'topic'],

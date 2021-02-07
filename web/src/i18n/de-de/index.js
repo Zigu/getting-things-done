@@ -50,4 +50,8 @@ export default {
   Topics: 'Themen',
   task_with_id: 'Aufgabe {id}',
   topic_with_id: 'Thema {id}',
+  Settings: 'Einstellungen',
+  Language: 'Sprache',
+  German: 'Deutsch',
+  English: 'English',
 };

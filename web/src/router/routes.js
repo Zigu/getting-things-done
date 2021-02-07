@@ -11,6 +11,7 @@ const routes = [
       { path: 'tasks', meta: { title: 'Tasks' }, component: () => import('pages/ListTasks.vue') },
       { path: 'topics', meta: { title: 'Topics' }, component: () => import('pages/ListTopics.vue') },
       { path: 'topics/:id', meta: { title: 'topic_with_id' }, component: () => import('pages/EditTopic.vue') },
+      { path: 'settings', meta: { title: 'Settings' }, component: () => import('pages/EditSettings.vue') },
     ],
   },
 
