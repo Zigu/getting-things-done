@@ -14,7 +14,10 @@
               class="bg-blue-2 text-black full-width"
               :key="index"
             >
-              <q-icon v-if="isOverdue(task)" name="alarm" color="red" class="q-mr-xs" />
+              <q-icon v-if="isOverdue(task)"
+                      name="running_with_errors"
+                      color="red"
+                      class="q-mr-xs" />
               <span>{{ task.summary }}</span>
             </q-badge>
           </template>
@@ -52,7 +55,10 @@
                   <span class="q-pr-md">
                     {{props.row.summary}}
                   </span>
-                  <q-icon name="alarm" color="red" v-if="isOverdue(props.row)" size="md"/>
+                  <q-icon name="alarm"
+                          color="red"
+                          v-if="isOverdue(props.row)"
+                          size="md"/>
                   <!--q-checkbox dense v-model="props.selected" :label="props.row.summary"/-->
                 </div>
                 <div class="text-subtitle2">{{$t('due')}} {{ props.cols[3].value }}</div>

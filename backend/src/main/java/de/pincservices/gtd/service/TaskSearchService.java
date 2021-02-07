@@ -19,7 +19,7 @@ public class TaskSearchService {
         finders.put("regex", new RegexBasedTaskFinder(taskRepository));
         finders.put("text", new TextBasedTaskFinder(taskRepository));
         finders.put("due", new DueBasedTaskFinder(taskRepository));
-        finders.put("until_due", new UntilDueBasedTaskFinder(taskRepository));
+        finders.put("solvable_due", new SolvableDueBasedTaskFinder(taskRepository));
         finders.put("topic", new TopicBasedTaskFinder(taskRepository, topicRepository));
     }
 

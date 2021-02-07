@@ -5,8 +5,8 @@ import de.pincservices.gtd.repository.TaskRepository;
 
 import java.util.Collections;
 
-public class UntilDueBasedTaskFinder extends TaskFinder {
-    public UntilDueBasedTaskFinder(TaskRepository taskRepository) {
+public class SolvableDueBasedTaskFinder extends TaskFinder {
+    public SolvableDueBasedTaskFinder(TaskRepository taskRepository) {
         super(taskRepository);
     }
 
@@ -15,6 +15,6 @@ public class UntilDueBasedTaskFinder extends TaskFinder {
         if (searchExpression == null) {
             return Collections.emptyList();
         }
-        return taskRepository.findAllByDueBefore(searchExpression, defaultSort);
+        return taskRepository.findAllByDueSolvableAt(searchExpression, defaultSort);
     }
 }

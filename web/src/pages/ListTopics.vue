@@ -35,9 +35,11 @@
                        color="primary"
                        :to="getEditLink(props)"
                 />
-                <!--q-btn size="sm" icon="list"
+                <q-btn size="sm" icon="pending_actions"
                        color="secondary"
-                /-->
+                       :title="$t('Open Tasks')"
+                       @click.stop="searchTasks(props.row.name)"
+                />
               </q-card-actions>
             </q-card>
           </div>
@@ -84,6 +86,10 @@ export default {
     },
     getNewLink() {
       return `/topics/${uuidv4()}`;
+    },
+    searchTasks(topicName) {
+      this.$root.$emit('search', { searchText: topicName, searchCriterion: 'topic' });
+      this.$router.push('/tasks/unsolved');
     },
   },
 };

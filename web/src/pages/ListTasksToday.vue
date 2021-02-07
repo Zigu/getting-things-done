@@ -165,7 +165,7 @@ export default {
     },
   },
   mounted() {
-    this.$axios.get(`/tasks?searchCriterion=until_due&searchExpression=${this.getQueryDate().format('YYYY-MM-DD')}`)
+    this.$axios.get(`/tasks?searchCriterion=solvable_due&searchExpression=${this.getQueryDate().format('YYYY-MM-DD')}`)
       .then((response) => {
         const result = response.data;
         const comparisonState = 'UNSOLVED';

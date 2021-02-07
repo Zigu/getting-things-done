@@ -77,7 +77,7 @@ import EssentialLink from 'components/EssentialLink.vue';
 const entityLinks = [
   {
     title: 'Open Tasks Today',
-    icon: 'alarm',
+    icon: 'today',
     link: '/tasks/today',
   },
   {
@@ -113,6 +113,9 @@ const appLinks = [
 export default {
   name: 'MainLayout',
   components: { EssentialLink },
+  created() {
+    this.$root.$on('search', this.onSearchEvent);
+  },
   computed: {
     appVersion() {
       return process.env.APP_VERSION;
@@ -140,6 +143,11 @@ export default {
     searchAll() {
       this.searchText = '';
       this.searchCriterion = 'all';
+      this.submitSearch();
+    },
+    onSearchEvent(event) {
+      this.searchText = event.searchText;
+      this.searchCriterion = event.searchCriterion;
       this.submitSearch();
     },
   },

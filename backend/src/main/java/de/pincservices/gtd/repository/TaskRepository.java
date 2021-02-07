@@ -69,11 +69,11 @@ public interface TaskRepository extends Neo4jRepository<Task, String> {
 
     @Query("MATCH (n:Task)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
-            + " WHERE n.due_date <= date($date)"
+            + " WHERE n.due_date <= date($date) OR (n.due_date > date($date) AND n.due_type = -1)"
             + " RETURN n{.*, __allProperties__: n{.*}, __nodeLabels__: labels(n), __internalNeo4jId__: id(n), __paths__: [p = (n)-[:`IS_NEXT_OF`|`BELONGS_TO`]-()-[:`IS_NEXT_OF`|`BELONGS_TO`*0..]-() | p]}"
             + " :#{orderBy(#sort)}"
     )
-    Iterable<Task> findAllByDueBefore(@Param("date") String date, Sort sort);
+    Iterable<Task> findAllByDueSolvableAt(@Param("date") String date, Sort sort);
 
     @Query("MATCH (n:Task)-[:BELONGS_TO]-(t:Topic)"
             + " WITH n, id(n) AS __internalNeo4jId__, n.due as due"
