@@ -1,6 +1,6 @@
 {
   "name": "getting-things-done",
-  "version": "0.2.2-SNAPSHOT",
+  "version": "0.3.0-SNAPSHOT",
   "description": "A Quasar Framework app",
   "productName": "Getting Things Done",
   "author": "zigu <porscha@pincservices.de>",
