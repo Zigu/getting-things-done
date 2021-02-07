@@ -90,9 +90,9 @@ const linksData = [
     link: '/tasks/discarded',
   },
   {
-    title: 'Projects',
-    icon: 'scatter_plot',
-    link: '/projects',
+    title: 'Topics',
+    icon: 'topic',
+    link: '/topics',
   },
 /*  {
     title: 'Docs',
@@ -153,7 +153,7 @@ export default {
       essentialLinks: linksData,
       searchText: '',
       searchCriterion: 'all',
-      searchCriteria: ['all', 'tag', 'text', 'regex', 'due', 'project'],
+      searchCriteria: ['all', 'tag', 'text', 'regex', 'due', 'topic'],
     };
   },
   methods: {

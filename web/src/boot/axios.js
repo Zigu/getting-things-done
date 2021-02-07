@@ -29,5 +29,5 @@ Vue.prototype.$axios = axios;
 
 export default ({ store }) => {
   store.dispatch('task/loadAllTasks');
-  store.dispatch('project/loadAllProjects');
+  store.dispatch('topic/loadAllTopics');
 };

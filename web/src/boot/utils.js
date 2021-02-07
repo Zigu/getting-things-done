@@ -27,7 +27,7 @@ export function mapTask(task) {
     summary: task.summary,
     notes: task.notes,
     tags: task.tags,
-    project: task.project,
+    topic: task.topic,
     due: mappedDue,
     resolution: mappedResolution,
     previousTasks: mappedPreviousTasks,

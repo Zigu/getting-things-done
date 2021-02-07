@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Version;
 
 @Data
 @Persistent
-public class Project {
+public class Topic {
 
     @Id
     private String id;

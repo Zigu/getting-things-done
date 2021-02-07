@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import task from './task';
-import project from './project';
+import topic from './topic';
 
 // import example from './module-example'
 
@@ -20,7 +20,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       task,
-      project,
+      topic,
     },
 
     // enable strict mode (adds overhead!)

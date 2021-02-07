@@ -10,7 +10,7 @@ export default {
   search_regex: 'RegEx',
   search_text: 'Text',
   search_due: 'Due',
-  search_project: 'Project',
+  search_topic: 'Topic',
   task_with_id: 'Task {id}',
-  project_with_id: 'Project {id}',
+  topic_with_id: 'Topic {id}',
 };

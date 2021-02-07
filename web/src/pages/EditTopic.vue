@@ -31,21 +31,21 @@
 
 <script>
 export default {
-  name: 'EditProject',
+  name: 'EditTopic',
   mounted() {
-    const foundProjects = this.$store.state.project.projects.filter((t) => t.id === this.id);
-    if (foundProjects.length === 1) {
+    const foundTopics = this.$store.state.topic.topics.filter((t) => t.id === this.id);
+    if (foundTopics.length === 1) {
       // slice does not work properly
       // eslint-disable-next-line prefer-destructuring
-      this.foundProject = foundProjects[0];
-      this.mapFoundProject();
+      this.foundTopics = foundTopics[0];
+      this.mapFoundTopic();
     }
     this.loading = false;
   },
   data() {
     return {
       loading: true,
-      foundProject: null,
+      foundTopic: null,
       id: this.$route.params.id,
       version: null,
       name: '',
@@ -54,14 +54,14 @@ export default {
 
   methods: {
     onSubmit() {
-      const project = {
+      const topic = {
         id: this.id,
         version: this.version,
         name: this.name,
       };
-      this.$store.dispatch('project/save', project)
+      this.$store.dispatch('topic/save', topic)
         .then(() => {
-          this.$router.push('/projects');
+          this.$router.push('/topics');
           const translatedMessage = this.$t('Submitted');
           this.$q.notify({
             color: 'green-4',
@@ -82,12 +82,12 @@ export default {
     },
 
     onReset() {
-      this.mapFoundTask();
+      this.mapFoundTopic();
     },
-    mapFoundProject() {
-      if (this.foundProject) {
-        this.version = this.foundProject.version;
-        this.name = this.foundProject.name;
+    mapFoundTopic() {
+      if (this.foundTopic) {
+        this.version = this.foundTopic.version;
+        this.name = this.foundTopic.name;
       } else {
         this.id = this.$route.params.id;
         this.version = null;

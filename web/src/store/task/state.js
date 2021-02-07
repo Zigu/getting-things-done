@@ -2,6 +2,10 @@ export default function () {
   return {
     tasks: [
     ],
-    searchApplied: false,
+    search: {
+      applied: false,
+      criterion: 'all',
+      expression: '',
+    },
   };
 }

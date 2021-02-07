@@ -151,7 +151,7 @@ export default {
     data() {
       let result = [];
       const queryDate = this.getQueryDate();
-      if (this.$store.state.task.searchApplied) {
+      if (this.$store.state.task.search.applied) {
         result = this.$store.state.task.tasks.filter((task) => {
           if (task.resolution.state !== 'UNSOLVED') {
             return false;
@@ -204,10 +204,10 @@ export default {
           sortable: false,
         },
         {
-          name: 'project',
+          name: 'topic',
           align: 'left',
-          label: this.$t('Project'),
-          field: 'project',
+          label: this.$t('Topic'),
+          field: 'topic',
           format: (val) => (val != null ? `${val.name}` : ''),
           sortable: false,
         },

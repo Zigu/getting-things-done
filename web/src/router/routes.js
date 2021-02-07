@@ -9,8 +9,8 @@ const routes = [
       { path: 'tasks/today', meta: { title: 'Open Tasks Today' }, component: () => import('pages/ListTasksToday.vue') },
       { path: 'tasks/:resolutionState', meta: { title: '$resolutionState Tasks' }, component: () => import('pages/ListTasks.vue') },
       { path: 'tasks', meta: { title: 'Tasks' }, component: () => import('pages/ListTasks.vue') },
-      { path: 'projects', meta: { title: 'Projects' }, component: () => import('pages/ListProjects.vue') },
-      { path: 'projects/:id', meta: { title: 'project_with_id' }, component: () => import('pages/EditProject.vue') },
+      { path: 'topics', meta: { title: 'Topics' }, component: () => import('pages/ListTopics.vue') },
+      { path: 'topics/:id', meta: { title: 'topic_with_id' }, component: () => import('pages/EditTopic.vue') },
     ],
   },
 

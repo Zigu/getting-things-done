@@ -27,7 +27,7 @@ public class TaskController {
     }
 
     @PostConstruct
-    public void fixTasks() {
+    public void migrate() {
         // For node migrations during development
     }
 
