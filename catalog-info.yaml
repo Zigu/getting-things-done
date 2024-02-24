@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: pincservices-getting-things-done
+  title: Getting Things Done
+spec:
+  owner: user:zigu
+  lifecycle: experimental
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pincservices-getting-things-done-website
+  title: Getting Things Done (Website)
+  description: Quasar application.
+  tags:
+    - vuejs
+    - quasar
+spec:
+  type: website
+  system: pincservices-getting-things-done
+  owner: user:zigu
+  lifecycle: experimental
+  dependsOn:
+    - component:pincservices-getting-things-done-service
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pincservices-getting-things-done-backend
+  title: Getting Things Done (Backend)
+  description: Spring boot application.
+  tags:
+    - springboot
+spec:
+  type: service
+  system: pincservices-getting-things-done
+  owner: user:zigu
+  lifecycle: experimental
+  dependsOn:
+    - resource:pincservices-getting-things-done-db
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: pincservices-getting-things-done-db
+  title: Getting Things Done Database
+  description: DB of the Getting Things Done service
+spec:
+  type: neo4j
+  system: pincservices-getting-things-done
+  owner: user:zigu
+  lifecycle: production
