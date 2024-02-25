@@ -22,7 +22,7 @@ spec:
   owner: user:zigu
   lifecycle: experimental
   dependsOn:
-    - component:pincservices-getting-things-done-service
+    - component:pincservices-getting-things-done-backend
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
